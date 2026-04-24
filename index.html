@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>EVM Demo - Proper Gujarati Wrap</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      padding: 10px;
+      margin: 0;
+    }
+
+    .machine {
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 18px;
+      border: 2px solid #333;
+      box-sizing: border-box;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 14px 8px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    th {
+      background: #eee;
+    }
+
+    .light {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #aaa;
+      margin: auto;
+    }
+
+    .on {
+      background: red;
+    }
+
+    .btn {
+      width: 70px;
+      height: 28px;
+      background: linear-gradient(#2a7bff, #0d4edb);
+      border: 1px solid #0b3aa6;
+      border-radius: 3px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #0b3aa6;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn:disabled {
+      background: #999;
+      box-shadow: none;
+    }
+
+    .controls {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .yellow {
+      width: 75px;
+      height: 30px;
+      background: gold;
+      border: 1px solid #b38f00;
+      cursor: pointer;
+      border-radius: 3px;
+      box-shadow: 0 2px 0 #8c6d00;
+    }
+
+    .reset-outside {
+      width: 100%;
+      max-width: 800px;
+      margin: 35px auto 0 auto;
+      text-align: right;
+    }
+
+    .reset {
+      padding: 12px 16px;
+      background: #444;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    canvas {
+      width: 220px;
+      height: 55px;
+    }
+
+    /* 🔥 SYMBOL IMAGE FIX */
+    .symbol-img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+
+<body>
+
+<h3 style="text-align:center;">EVM Demo (Proper Gujarati Word Wrap)</h3>
+
+<div class="machine">
+
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Light</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody id="candidates"></tbody>
+  </table>
+
+  <div class="controls">
+    <button class="yellow" onclick="submitVote()"></button>
+  </div>
+
+</div>
+
+<div class="reset-outside">
+  <button class="reset" onclick="resetMachine()">Reset Machine</button>
+</div>
+
+<script>
+
+const maxVotes = 4;
+let selected = [];
+let locked = false;
+
+/* DATA */
+const data = [
+  { no: "1", name: "આયુષી વિક્રમભાઈ કોઠારી", symbol: "<img src='Image/bjp_logo.png' class='symbol-img'>" },
+  { no: "2", name: "", symbol: "" },
+  { no: "3", name: "ઉપેન્દ્રભાઈ શીવાભાઈ સુતરીયા", symbol: "<img src='Image/bjp_logo.png' class='symbol-img'>" },
+  { no: "4", name: "", symbol: "" },
+  { no: "5", name: "", symbol: "" },
+  { no: "6", name: "પાયલબેન મેહુલભાઈ મિસ્ત્રી", symbol: "<img src='Image/bjp_logo.png' class='symbol-img'>" },
+  { no: "7", name: "પ્રકાશચંદ્ર ડાહ્યાભાઈ પટેલ", symbol: "<img src='Image/bjp_logo.png' class='symbol-img'>" },
+  { no: "8", name: "", symbol: "" },
+  { no: "9", name: "", symbol: "" },
+  { no: "10", name: "", symbol: "" },
+  { no: "11", name: "", symbol: "" },
+  { no: "NOTA", name: "નોટા (ઉપરના પૈકી કોઈ નહીં)", symbol: "" }
+];
+
+// NOTA rule
+function isNota(index) {
+  return data[index].no === "NOTA";
+}
+
+// toggle
+function toggle(index) {
+  if (locked) return;
+
+  const notaIndex = data.findIndex(d => d.no === "NOTA");
+
+  if (selected.includes(index)) {
+    selected = selected.filter(i => i !== index);
+    render();
+    return;
+  }
+
+  if (isNota(index)) {
+    selected = [index];
+    render();
+    return;
+  }
+
+  if (selected.includes(notaIndex)) return;
+
+  if (selected.length >= maxVotes) return;
+
+  selected.push(index);
+  render();
+}
+
+// sound
+function playBeep() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  const ctx = new AudioContext();
+
+  const gain = ctx.createGain();
+  gain.connect(ctx.destination);
+  gain.gain.value = 0.09;
+
+  const osc = ctx.createOscillator();
+  osc.type = "square";
+  osc.frequency.value = 800;
+
+  osc.connect(gain);
+  osc.start();
+
+  setTimeout(() => osc.stop(), 500);
+  setTimeout(() => ctx.close(), 600);
+}
+
+// submit
+function submitVote() {
+  if (locked) return;
+  if (selected.length === 0) return;
+
+  locked = true;
+  playBeep();
+
+  render();
+
+  setTimeout(() => {
+    selected = [];
+    render();
+  }, 1000);
+}
+
+// reset
+function resetMachine() {
+  selected = [];
+  locked = false;
+  render();
+}
+
+/* 🔥 FIXED WORD-WRAP FUNCTION */
+function wrapText(ctx, text, maxWidth) {
+  const words = text.split(" ");
+  let lines = [];
+  let currentLine = "";
+
+  for (let i = 0; i < words.length; i++) {
+    let testLine = currentLine + words[i] + " ";
+    let width = ctx.measureText(testLine).width;
+
+    if (width > maxWidth && i > 0) {
+      lines.push(currentLine);
+      currentLine = words[i] + " ";
+    } else {
+      currentLine = testLine;
+    }
+  }
+
+  lines.push(currentLine);
+  return lines;
+}
+
+// draw names
+function drawNames() {
+  data.forEach((item, index) => {
+    const canvas = document.getElementById("name_" + index);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = "bold 18px Arial";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#000";
+
+    const text = item.name || "-";
+    const lines = wrapText(ctx, text, 200);
+
+    lines.slice(0, 2).forEach((line, i) => {
+      ctx.fillText(line, canvas.width / 2, 20 + (i * 22));
+    });
+  });
+}
+
+// render
+function render() {
+  const container = document.getElementById("candidates");
+  container.innerHTML = "";
+
+  data.forEach((item, index) => {
+    const isSelected = selected.includes(index);
+
+    container.innerHTML += `
+      <tr>
+        <td>${item.no}</td>
+
+        <td>
+          <canvas id="name_${index}" width="220" height="55"></canvas>
+        </td>
+
+        <td>${item.symbol || ""}</td>
+
+        <td>
+          <div class="light ${isSelected ? 'on' : ''}"></div>
+        </td>
+
+        <td>
+          <button class="btn" onclick="toggle(${index})" ${locked ? 'disabled' : ''}></button>
+        </td>
+      </tr>
+    `;
+  });
+
+  setTimeout(drawNames, 0);
+}
+
+render();
+
+</script>
+
+</body>
+</html>
