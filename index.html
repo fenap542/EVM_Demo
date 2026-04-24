@@ -178,26 +178,29 @@ function toggle(index) {
   if (locked) return;
 
   const notaIndex = data.findIndex(d => d.no === "NOTA");
+  const isNota = data[index].no === "NOTA";
 
+  const notaSelected = selected.includes(notaIndex);
+
+  // 🔥 If NOTA is selected → block all other selections
+  if (notaSelected && !isNota) return;
+
+  // 🔥 If any candidate is selected → block NOTA
+  if (!notaSelected && isNota && selected.length > 0) return;
+
+  // 🔥 Toggle OFF
   if (selected.includes(index)) {
     selected = selected.filter(i => i !== index);
     render();
     return;
   }
 
-  if (isNota(index)) {
+  // 🔥 Toggle ON NOTA (only if nothing else selected)
+  if (isNota) {
     selected = [index];
     render();
     return;
   }
-
-  if (selected.includes(notaIndex)) return;
-
-  if (selected.length >= maxVotes) return;
-
-  selected.push(index);
-  render();
-}
 
 // sound
 function playBeep() {
