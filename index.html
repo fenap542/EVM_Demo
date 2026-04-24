@@ -200,7 +200,15 @@ function toggle(index) {
     selected = [index];
     render();
     return;
+  }
+
+  // 🔥 Normal candidate selection (NOTA must not be active)
+  if (selected.length >= maxVotes) return;
+
+  selected.push(index);
+  render();
 }
+
 // sound
 function playBeep() {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
