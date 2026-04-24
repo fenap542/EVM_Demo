@@ -1,149 +1,177 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>EVM ડેમો - વોર્ડ 7 ઇડર નગરપાલિકા</title>
+<meta charset="UTF-8">
+<title>EVM ડેમો - વોર્ડ 7 ઇડર નગરપાલિકા</title>
 
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      padding: 10px;
-      margin: 0;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #dcdcdc;
+  margin: 0;
+  padding: 20px;
+}
 
-    .machine {
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      padding: 18px;
-      border: 2px solid #333;
-      box-sizing: border-box;
-      overflow-x: auto;
-    }
+/* 🔲 MAIN EVM BOX */
+.evm-box {
+  max-width: 450px;
+  margin: auto;
+  background: #e6e6e6;
+  border: 4px solid #333;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: inset 0 0 10px #999;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 520px;
-    }
+/* 🔖 HEADER */
+.header {
+  text-align: center;
+  font-weight: bold;
+  background: #cfcfcf;
+  padding: 8px;
+  border: 2px solid #333;
+  margin-bottom: 10px;
+}
 
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 14px 8px;
-      text-align: center;
-      font-size: 18px;
-    }
+/* 📜 STRIP */
+.strip {
+  background: white;
+  border: 2px solid #333;
+}
 
-    th {
-      background: #eee;
-    }
+/* ROW */
+.row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  height: 60px;
+}
 
-    .light {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #aaa;
-      margin: auto;
-    }
+.row:last-child {
+  border-bottom: none;
+}
 
-    .on {
-      background: red;
-    }
+.no {
+  width: 40px;
+  text-align: center;
+  font-weight: bold;
+}
 
-    .btn {
-      width: 70px;
-      height: 28px;
-      background: linear-gradient(#2a7bff, #0d4edb);
-      border: 1px solid #0b3aa6;
-      border-radius: 3px;
-      cursor: pointer;
-      box-shadow: 0 2px 0 #0b3aa6;
-    }
+.name {
+  flex: 1;
+  padding: 0 5px;
+  font-size: 14px;
+}
 
-    .btn:active {
-      transform: translateY(2px);
-    }
+.symbol {
+  width: 60px;
+  text-align: center;
+}
 
-    .btn:disabled {
-      background: #999;
-      box-shadow: none;
-    }
+.symbol img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 
-    .controls {
-      margin-top: 14px;
-      display: flex;
-      justify-content: flex-end;
-    }
+.light {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #bbb;
+  margin: 0 10px;
+}
 
-    .yellow {
-      width: 75px;
-      height: 30px;
-      background: gold;
-      border: 1px solid #b38f00;
-      cursor: pointer;
-      border-radius: 3px;
-      box-shadow: 0 2px 0 #8c6d00;
-    }
+.on {
+  background: red;
+}
 
-    .reset-outside {
-      width: 100%;
-      max-width: 800px;
-      margin: 35px auto 0 auto;
-      text-align: right;
-    }
+.btn {
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  background: #2a7bff;
+  border: 1px solid #0b3aa6;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-    .reset {
-      padding: 12px 16px;
-      background: #444;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
+.btn:disabled {
+  background: #999;
+}
 
-    canvas {
-      width: 220px;
-      height: 55px;
-    }
+/* 🔥 REGISTER BUTTON (RIGHT SIDE & BIGGER) */
+.vote-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
 
-    /* 🔥 SYMBOL IMAGE FIX */
-    .symbol-img {
-      width: 55px;
-      height: 55px;
-      object-fit: contain;
-    }
-  </style>
+.vote-btn {
+  width: 120px;
+  height: 45px;
+  background: gold;
+  border: 2px solid #b38f00;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* 📝 MESSAGE */
+.seal {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+  color: #333;
+}
+
+/* RESET */
+.reset {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  background: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+}
+</style>
 </head>
 
 <body>
 
-<h3 style="text-align:center;">EVM ડેમો - વોર્ડ 7 ઇડર નગરપાલિકા</h3>
+<div class="evm-box">
 
-<div class="machine">
-
-  <table>
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>Name</th>
-        <th>Symbol</th>
-        <th>Light</th>
-        <th></th>
-      </tr>
-    </thead>
-
-    <tbody id="candidates"></tbody>
-  </table>
-
-  <div class="controls">
-    <button class="yellow" onclick="submitVote()"></button>
+  <div class="header">
+    EVM ડેમો - વોર્ડ 7 ઇડર નગરપાલિકા
   </div>
+
+  <div class="strip" id="candidates"></div>
+
+  <!-- 🔥 RIGHT SIDE REGISTER BUTTON -->
+  <div class="vote-container">
+    <button class="vote-btn" onclick="submitVote()">રજીસ્ટર</button>
+  </div>
+
+  <!-- 🔥 GUJARATI MESSAGE -->
+  <div class="seal">
+    આ માત્ર મતદારોની જાગૃતિ માટે બનાવેલ EVM મશીન ડેમો છે
+  </div>
+
+  <button class="reset" onclick="resetMachine()">RESET</button>
 
 </div>
 
-<div class="reset-outside">
-  <button class="reset" onclick="resetMachine()">Reset Machine</button>
+<div class="footer">
+  Coded by Fena Anshu Patel
 </div>
 
 <script>
@@ -152,151 +180,83 @@ const maxVotes = 4;
 let selected = [];
 let locked = false;
 
-/* DATA */
+/* 🔥 NOW 9 CANDIDATES */
 const data = [
-  { no: "1", name: "આયુષી વિક્રમભાઈ કોઠારી", symbol: "<img src='bjp_logo.png' class='symbol-img'>" },
-  { no: "2", name: "", symbol: "" },
-  { no: "3", name: "ઉપેન્દ્રભાઈ શીવાભાઈ સુતરીયા", symbol: "<img src='bjp_logo.png' class='symbol-img'>" },
-  { no: "4", name: "", symbol: "" },
-  { no: "5", name: "", symbol: "" },
-  { no: "6", name: "પાયલબેન મેહુલભાઈ મિસ્ત્રી", symbol: "<img src='bjp_logo.png' class='symbol-img'>" },
-  { no: "7", name: "પ્રકાશચંદ્ર ડાહ્યાભાઈ પટેલ", symbol: "<img src='bjp_logo.png' class='symbol-img'>" },
-  { no: "8", name: "", symbol: "" },
-  { no: "9", name: "", symbol: "" },
-  { no: "10", name: "", symbol: "" },
-  { no: "11", name: "", symbol: "" },
+  { no: "૧", name: "આયુષી વિક્રમભાઈ કોઠારી", symbol: "bjp_logo.png" },
+  { no: "૨", name: "", symbol: "" },
+  { no: "૩", name: "ઉપેન્દ્રભાઈ શીવાભાઈ સુતરીયા", symbol: "bjp_logo.png" },
+  { no: "૪", name: "", symbol: "" },
+  { no: "૫", name: "", symbol: "" },
+  { no: "૬", name: "પાયલબેન મેહુલભાઈ મિસ્ત્રી", symbol: "bjp_logo.png" },
+  { no: "૭", name: "પ્રકાશચંદ્ર ડાહ્યાભાઈ પટેલ", symbol: "bjp_logo.png" },
+  { no: "૮", name: "", symbol: "" },
+  { no: "૯", name: "", symbol: "" },
   { no: "NOTA", name: "નોટા (ઉપરના પૈકી કોઈ નહીં)", symbol: "" }
 ];
 
-// NOTA rule
-function isNota(index) {
-  return data[index].no === "NOTA";
-}
-
-// toggle
 function toggle(index) {
   if (locked) return;
 
   const notaIndex = data.findIndex(d => d.no === "NOTA");
   const isNota = data[index].no === "NOTA";
-
   const notaSelected = selected.includes(notaIndex);
 
-  // 🔥 If NOTA is selected → block all other selections
   if (notaSelected && !isNota) return;
-
-  // 🔥 If any candidate is selected → block NOTA
   if (!notaSelected && isNota && selected.length > 0) return;
 
-  // 🔥 Toggle OFF
   if (selected.includes(index)) {
     selected = selected.filter(i => i !== index);
     render();
     return;
   }
 
-  // 🔥 Toggle ON NOTA (only if nothing else selected)
   if (isNota) {
     selected = [index];
     render();
     return;
   }
 
-  // 🔥 Normal candidate selection (NOTA must not be active)
   if (selected.length >= maxVotes) return;
 
   selected.push(index);
   render();
 }
 
-// sound
 function playBeep() {
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const ctx = new AudioContext();
-
-  const gain = ctx.createGain();
-  gain.connect(ctx.destination);
-  gain.gain.value = 0.09;
-
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const osc = ctx.createOscillator();
-  osc.type = "square";
-  osc.frequency.value = 800;
+  const gain = ctx.createGain();
 
   osc.connect(gain);
-  osc.start();
+  gain.connect(ctx.destination);
 
-  setTimeout(() => osc.stop(), 500);
-  setTimeout(() => ctx.close(), 600);
+  osc.frequency.value = 800;
+  gain.gain.value = 0.1;
+
+  osc.start();
+  setTimeout(() => osc.stop(), 300);
 }
 
-// submit
 function submitVote() {
-  if (locked) return;
-  if (selected.length === 0) return;
+  if (locked || selected.length === 0) return;
 
   locked = true;
   playBeep();
-
   render();
 
   setTimeout(() => {
     selected = [];
+    locked = false;
     render();
   }, 1000);
 }
 
-// reset
 function resetMachine() {
   selected = [];
   locked = false;
   render();
 }
 
-/* 🔥 FIXED WORD-WRAP FUNCTION */
-function wrapText(ctx, text, maxWidth) {
-  const words = text.split(" ");
-  let lines = [];
-  let currentLine = "";
-
-  for (let i = 0; i < words.length; i++) {
-    let testLine = currentLine + words[i] + " ";
-    let width = ctx.measureText(testLine).width;
-
-    if (width > maxWidth && i > 0) {
-      lines.push(currentLine);
-      currentLine = words[i] + " ";
-    } else {
-      currentLine = testLine;
-    }
-  }
-
-  lines.push(currentLine);
-  return lines;
-}
-
-// draw names
-function drawNames() {
-  data.forEach((item, index) => {
-    const canvas = document.getElementById("name_" + index);
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font = "bold 18px Arial";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#000";
-
-    const text = item.name || "-";
-    const lines = wrapText(ctx, text, 200);
-
-    lines.slice(0, 2).forEach((line, i) => {
-      ctx.fillText(line, canvas.width / 2, 20 + (i * 22));
-    });
-  });
-}
-
-// render
 function render() {
   const container = document.getElementById("candidates");
   container.innerHTML = "";
@@ -305,27 +265,17 @@ function render() {
     const isSelected = selected.includes(index);
 
     container.innerHTML += `
-      <tr>
-        <td>${item.no}</td>
-
-        <td>
-          <canvas id="name_${index}" width="220" height="55"></canvas>
-        </td>
-
-        <td>${item.symbol || ""}</td>
-
-        <td>
-          <div class="light ${isSelected ? 'on' : ''}"></div>
-        </td>
-
-        <td>
-          <button class="btn" onclick="toggle(${index})" ${locked ? 'disabled' : ''}></button>
-        </td>
-      </tr>
+      <div class="row">
+        <div class="no">${item.no}</div>
+        <div class="name">${item.name || "-"}</div>
+        <div class="symbol">
+          ${item.symbol ? `<img src="${item.symbol}">` : ""}
+        </div>
+        <div class="light ${isSelected ? 'on' : ''}"></div>
+        <button class="btn" onclick="toggle(${index})" ${locked ? 'disabled' : ''}></button>
+      </div>
     `;
   });
-
-  setTimeout(drawNames, 0);
 }
 
 render();
